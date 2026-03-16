@@ -55,6 +55,8 @@ const Signin = () => {
 
     // Update the error hook with a message
     setError("Oooops something went wrong. Try again")
+
+    
   }
 
 }
@@ -88,7 +90,7 @@ const Signin = () => {
 
           <input type="submit"
           value="Sign In"
-          className='btn btn-primary' />
+          className='btn btn-primary' /> <br />
           Don't have an account? <Link to={'/signup'}>Register</Link>
         </form>
       </div>

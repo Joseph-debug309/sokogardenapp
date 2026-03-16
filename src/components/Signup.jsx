@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { data, Link, useNavigate } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 
 
 const Signup = () => {
+
+  const navigate = useNavigate();
   // Initialize the hooks
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -15,6 +17,8 @@ const Signup = () => {
   const [success, setSucess] = useState("");
   const [error, setError] = useState("");
 
+  
+
   // Below is a function that will handle the submit function
   const handleSubmit = async(e) => {
     // Below we prevent our site from reloading
@@ -23,84 +27,47 @@ const Signup = () => {
     //Update our loading hook with a message that will display to the user interface as they are trying to register
     setLoading("Please wait as we process yor request...")
 
-    try{
-      //Create a form data object that will enable you to capture the four details that are entered into the form
-      const formdata = new FormData();
+  
 
-      //Insert the four details in terms of key-value pairs
-      formdata.append("username", username);
-      formdata.append("email", email);
-      formdata.append("password", password);
-      formdata.append("phone", phone);
+    
+try {
+  const formdata = new FormData();
+  formdata.append("username", username);
+  formdata.append("email", email);
+  formdata.append("password", password);
+  formdata.append("phone", phone);
 
-      //By use of Axios, we can access the method post
-      const response =await axios.post("http://josephdebug.alwaysdata.net/api/signup", formdata)
+  const response = await axios.post("http://josephdebug.alwaysdata.net/api/signup", formdata);
 
-      // Set back the loading to default
-      setLoading("");
+  setLoading("");
+  setSucess(response.data.message);
+  setError("");
 
-      //Just incase everything goes well. update 
-      setSucess(response.data.message)
+  // Clear hooks
+  setUsername("");
+  setEmail("");
+  setPassword("");
+  setPhone("");
 
-      setError("");
+  // Redirect to the login page (or dashboard) after a 2-second delay
+  setTimeout(() => {
+    navigate('/signin'); // Change '/signin' to your desired route
+  }, 2000);
 
-      //clear your hooks
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      setPhone("");
-
-      setTimeout(() => {
-        setSucess("");
-      }, 5000);
-
-      setTimeout(() => {
-        setError("");
-      }, 5000);
-
-  function MyForm() {
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    // 1. Prevent the browser from reloading the page
-    e.preventDefault();
-
-    // 2. Access form data if needed
-    const formData = new FormData(e.target);
-    console.log("Form Submitted:", Object.fromEntries(formData));
-
-    // 3. Logic (API calls, validation, etc.) goes here
-
-    // 4. Navigate to the new path
-    navigate('/signin');
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="username" placeholder="Enter Name" />
-      <button type="submit">Submit and Go</button>
-    </form>
-  );
+} catch (error) {
+  setLoading("");
+  // Tip: Check if the error has a response message from the server
+  setError(error.response?.data?.message || error.message);
 }
-        
-    }  
-    catch(error){
-      // set the loading hook back to default
-      setLoading("");
-
       // Update the error hook with the message given from the response
       setError(error.message)
 
     }
 
-  }
-
-
   return (
     <div className='row justify-content-center mt-4'>
       <div className="card col-md-6 shadow p-4">
          <h1 className='text-primary'>Sign Up</h1>
-         
          <h5 className="text-warning">{loading}</h5>
          <h3 className="text-success">{success}</h3>
          <h4 className='text-danger'>{error}</h4>
@@ -162,4 +129,4 @@ const Signup = () => {
 export default Signup;
 
 // Research on Axios module in reactjs
-// How to secure data from being registered succesfully
+// How tosecure data from being registered succesfully
