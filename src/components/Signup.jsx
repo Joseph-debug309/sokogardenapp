@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { data, Link, useNavigate } from 'react-router-dom';
 
 
 const Signup = () => {
@@ -49,7 +49,41 @@ const Signup = () => {
       setEmail("");
       setPassword("");
       setPhone("");
-    }
+
+      setTimeout(() => {
+        setSucess("");
+      }, 5000);
+
+      setTimeout(() => {
+        setError("");
+      }, 5000);
+
+  function MyForm() {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    // 1. Prevent the browser from reloading the page
+    e.preventDefault();
+
+    // 2. Access form data if needed
+    const formData = new FormData(e.target);
+    console.log("Form Submitted:", Object.fromEntries(formData));
+
+    // 3. Logic (API calls, validation, etc.) goes here
+
+    // 4. Navigate to the new path
+    navigate('/signin');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="username" placeholder="Enter Name" />
+      <button type="submit">Submit and Go</button>
+    </form>
+  );
+}
+        
+    }  
     catch(error){
       // set the loading hook back to default
       setLoading("");
@@ -66,6 +100,7 @@ const Signup = () => {
     <div className='row justify-content-center mt-4'>
       <div className="card col-md-6 shadow p-4">
          <h1 className='text-primary'>Sign Up</h1>
+         
          <h5 className="text-warning">{loading}</h5>
          <h3 className="text-success">{success}</h3>
          <h4 className='text-danger'>{error}</h4>
@@ -127,4 +162,4 @@ const Signup = () => {
 export default Signup;
 
 // Research on Axios module in reactjs
-// How tosecure data from being registered succesfully
+// How to secure data from being registered succesfully
